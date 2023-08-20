@@ -26,9 +26,9 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 const idl: { [key: string]: any } = require('../idl.json');
 const programId = new PublicKey(idl.metadata.address);
 const keys: { [key: string]: any } = require('../keys.json');
-const mint = new PublicKey(keys.mintPublickey);
+const mint = new PublicKey(process.env.MintPublicKey);
 
-let publicKeyFund = new PublicKey(keys.fundAccount);
+let publicKeyFund = new PublicKey(process.env.OwnerAccount);
 export default function HomePage(): JSX.Element {
   const phantomWallet = new PhantomWalletAdapter();
   const navigate = useNavigate();
@@ -39,6 +39,7 @@ export default function HomePage(): JSX.Element {
     isLoading,
     setIsLoading,
     fundPublicKey,
+    
   } = appStore();
   const provider: AnchorProvider = useAnchorProvider();
   const userTokenAccount = useTokenAccount({
@@ -65,8 +66,9 @@ export default function HomePage(): JSX.Element {
       const { solana }: any = window;
       let walletBalance = await provider.connection.getBalance(walletAddress);
       console.log(walletBalance / LAMPORTS_PER_SOL);
-      if (walletBalance / LAMPORTS_PER_SOL < 1) {
+      if (walletBalance / LAMPORTS_PER_SOL < 0.5) {
         message.warning('You dont have enough SOL');
+        setIsLoading(false);
         return;
       }
       let associatedTokenAddress = await getAssociatedTokenAddress(
@@ -88,8 +90,8 @@ export default function HomePage(): JSX.Element {
       transaction.recentBlockhash = await blockhashObj.blockhash;
       let signature = await solana.signAndSendTransaction(transaction);
       await provider.connection.confirmTransaction(signature);
-      navigate(0);
       setIsLoading(false);
+      navigate(0);
     } catch (ex) {
       console.log(ex);
       setIsLoading(false);
@@ -162,7 +164,7 @@ export default function HomePage(): JSX.Element {
   };
   return (
     <React.Suspense fallback={null}>
-        <ConnectionProvider endpoint={'http://127.0.0.1:8899'}>
+        <ConnectionProvider endpoint='https://api.devnet.solana.com'>
       <WalletProvider wallets={[phantomWallet]}>
       <div className="lb-container">
         <DemoInformation>{walletAddress && <Fund />}</DemoInformation>
@@ -189,7 +191,7 @@ export default function HomePage(): JSX.Element {
                 </Button>
               </div>
             ) : (
-              <>
+              fundPublicKey&& <>
                 <SwapForm
                   title="MOVE -> SOL"
                   type="SOL"

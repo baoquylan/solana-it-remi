@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonConfig = require('./webpack.common');
 const { merge } = require('webpack-merge');
 const  {DefinePlugin}  = require("webpack");
+
 const devConfig = {
   entry: path.join(__dirname, '../src/index.tsx'),
   mode: 'development',
@@ -24,9 +25,9 @@ const devConfig = {
       template: path.join(__dirname, '../public/index.html'),
     }),
     new DefinePlugin({
-      'process.env.MintPublicKey': JSON.stringify('DtKoLP7vEyMBP8muouk939yLysg4Y6kgeotkJnREKjnW'),
+      'process.env.MintPublicKey': JSON.stringify('FCn9B1uTEsVevM89NCsJPvvcKwSpRrFCXSkYedSkje4U'),
       'process.env.OwnerAccount': JSON.stringify('EJ8gucJAZxA1LspjGMNYBWsXUSYpimSg6UW99QHPBMAL'),
-      'process.env.EnvType': JSON.stringify('devnet')
+      'process.env.EnvType': JSON.stringify('localhost')
     }),
   ],
 };

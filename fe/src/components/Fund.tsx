@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, message } from 'antd';
-import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
+import { Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { Program, utils, Idl } from '@project-serum/anchor';
 import useAnchorProvider from '../hooks/useAnchorProvider';
 import { web3 } from '@project-serum/anchor';
 import { appStore } from '../store/App.store';
 import useTokenAccount from '../hooks/useTokenAccount';
+import { useNavigate } from 'react-router-dom';
 
 const idl: { [key: string]: any } = require('../idl.json');
 const keys: { [key: string]: any } = require('../keys.json');
@@ -15,8 +16,9 @@ const programId = new PublicKey(idl.metadata.address);
 const { SystemProgram } = web3;
 
 
-let publicKeyFund =new PublicKey(keys.fundAccount)
+let publicKeyFund =new PublicKey(process.env.OwnerAccount)
 export default function Fund() {
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [funds, setFunds] = useState<Array<any>>([]);
   const {
@@ -61,6 +63,8 @@ export default function Fund() {
 
   const createFund = async () => {
     try {
+      const {solana}: any = window
+      let wallet = solana as Keypair;
       let idll = idl as Idl;
       const program = new Program(idll, programId, provider);
       const [fund] = await PublicKey.findProgramAddressSync(
@@ -72,9 +76,10 @@ export default function Fund() {
           fund,
           user: walletAddress,
           systemProgram: SystemProgram.programId,
-        },
+        }
       });
       setFundPublickey(fund);
+      navigate(0)
     } catch (ex) {
       message.warning('Error');
       console.log(ex);

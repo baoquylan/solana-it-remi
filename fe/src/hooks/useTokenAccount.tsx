@@ -14,7 +14,7 @@ import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 const keys: { [key: string]: any } = require('../keys.json');
 
-const mint = new PublicKey(keys.mintPublickey);
+const mint = new PublicKey(process.env.MintPublicKey);
 interface UseTokenAccount {
   provider: AnchorProvider;
   address: PublicKey
