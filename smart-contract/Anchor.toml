@@ -9,7 +9,7 @@ swap_contract = "C8F3WqAioE5rMZJS5enC6fT4iQVorwxZhN77AgWcWraM"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet"
 wallet = "/home/lanbao/.config/solana/id.json"
 
 [scripts]
