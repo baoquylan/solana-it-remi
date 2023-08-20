@@ -159,8 +159,9 @@ export default function HomePage(): JSX.Element {
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       },
-      signers: [solana],
+      signers: [payer],
     });
+    navigate(0)
   };
   return (
     <React.Suspense fallback={null}>
