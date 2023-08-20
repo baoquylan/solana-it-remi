@@ -1,0 +1,131 @@
+{
+  "version": "0.1.0",
+  "name": "swap_contract",
+  "instructions": [
+    {
+      "name": "create",
+      "accounts": [
+        {
+          "name": "fund",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "swapToSol",
+      "accounts": [
+        {
+          "name": "fund",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "from",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "fromAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "toAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "swapToSpl",
+      "accounts": [
+        {
+          "name": "fund",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "from",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "fromAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "toAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Fund",
+      "type": {
+        "kind": "struct",
+        "fields": []
+      }
+    }
+  ],
+  "metadata": {
+    "address": "C8F3WqAioE5rMZJS5enC6fT4iQVorwxZhN77AgWcWraM"
+  }
+}

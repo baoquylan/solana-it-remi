@@ -1,0 +1,31 @@
+import * as React from 'react';
+
+import { appStore } from '../store/App.store';
+import UserInformation from './UserInformation';
+
+interface DemoInformation {
+  children: React.ReactNode;
+}
+
+export default function DemoInformation({
+  children,
+}: DemoInformation): React.ReactNode {
+  const { walletAddress } = appStore();
+  const { solana }: any = window;
+
+  return (
+    <React.Suspense fallback={null}>
+      <div className="lb-header">
+        <div className="lb-title">
+          <span>DEMO</span>
+        </div>
+        {walletAddress && (
+         <UserInformation/>
+        )}
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {children}
+        </div>
+      </div>
+    </React.Suspense>
+  );
+}
