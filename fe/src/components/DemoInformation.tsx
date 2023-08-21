@@ -13,8 +13,7 @@ export default function DemoInformation({
 }: DemoInformation): React.ReactNode {
   const { walletAddress } = appStore();
   const { solana }: any = window;
-  const wallet = useAnchorWallet();
-  console.log(wallet)
+
   return (
     <React.Suspense fallback={null}>
       <div className="lb-header">

@@ -118,21 +118,28 @@ export default function HomePage(): JSX.Element {
 
       let idll = idl as Idl;
       const program = new Program(idll, programId, provider);
-      // await program.methods.swapToSol(amount).accounts(
-      //    {
-      //     fund: fundPublicKey,
-      //     user: provider.wallet.publicKey,
+     let instruction =  await program.methods.swapToSol(amount).accounts(
+         {
+          fund: fundPublicKey,
+          user: walletAddress,
 
-      //     from: provider.wallet.publicKey,
-      //     fromAta: userTokenAccount,
-      //     toAta: fundTokenAccount,
+          from: walletAddress,
+          fromAta: userTokenAccount,
+          toAta: fundTokenAccount,
 
-      //     systemProgram:web3.SystemProgram.programId,
-      //     tokenProgram: TOKEN_PROGRAM_ID,
-      //   })
-      //   .signers([provider.wallet])
-      // });
+          systemProgram:web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        }).instruction()
+      
 
+        const transaction = new web3.Transaction().add(
+          instruction
+        );
+        let blockhashObj = await provider.connection.getRecentBlockhash();
+        transaction.feePayer = walletAddress;
+        transaction.recentBlockhash = await blockhashObj.blockhash;
+        let signature = await solana.signAndSendTransaction(transaction);
+        await provider.connection.confirmTransaction(signature);
       // const transaction = new web3.Transaction().add(
       //   program.methods.swapToSol(amount, {
       //     accounts: {
@@ -148,22 +155,22 @@ export default function HomePage(): JSX.Element {
       //     },
       //   })
       // );
-      let wallet = solana as Keypair;
+      // let wallet = solana as Keypair;
 
-      await program.rpc.swapToSol(amount, {
-        accounts: {
-          fund: fundPublicKey,
-          user: walletAddress,
+      // await program.rpc.swapToSol(amount, {
+      //   accounts: {
+      //     fund: fundPublicKey,
+      //     user: walletAddress,
 
-          from: walletAddress,
-          fromAta: userTokenAccount,
-          toAta: fundTokenAccount,
+      //     from: walletAddress,
+      //     fromAta: userTokenAccount,
+      //     toAta: fundTokenAccount,
 
-          systemProgram: web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-        },
-        signers: [solana ],
-      });
+      //     systemProgram: web3.SystemProgram.programId,
+      //     tokenProgram: TOKEN_PROGRAM_ID,
+      //   },
+      //   signers: [solana ],
+      // });
       navigate(0);
     } catch (ex) {
       console.log(ex);
@@ -180,22 +187,52 @@ export default function HomePage(): JSX.Element {
       const program = new Program(idll, programId, provider);
       let wallet = solana as Keypair;
 
-      await program.rpc.swapToSpl(amount, {
-        accounts: {
-          fund: fundPublicKey,
-          user: walletAddress,
+      // await program.rpc.swapToSpl(amount, {
+      //   accounts: {
+      //     fund: fundPublicKey,
+      //     user: walletAddress,
 
-          from: payer.publicKey,
-          fromAta: fundTokenAccount,
-          toAta: userTokenAccount,
+      //     from: payer.publicKey,
+      //     fromAta: fundTokenAccount,
+      //     toAta: userTokenAccount,
 
-          systemProgram: web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-        },
-        signers: [payer],
-      });
+      //     systemProgram: web3.SystemProgram.programId,
+      //     tokenProgram: TOKEN_PROGRAM_ID,
+      //   },
+      //   signers: [payer],
+      // });
+
+
+
+      
+      let instruction=  await program.methods.swapToSpl(amount).accounts(
+        {
+         fund: fundPublicKey,
+         user: walletAddress,
+
+         from: payer.publicKey,
+         fromAta: fundTokenAccount,
+         toAta: userTokenAccount,
+
+         systemProgram: web3.SystemProgram.programId,
+         tokenProgram: TOKEN_PROGRAM_ID,
+       }
+     ).signers([payer]).rpc()
+
+
+
+    //  const transaction = new web3.Transaction().add(
+    //    instruction
+    //  );
+    //  let blockhashObj = await provider.connection.getRecentBlockhash();
+    //  transaction.feePayer = payer.publicKey;
+    //  transaction.recentBlockhash = await blockhashObj.blockhash;
+    //  let signature = await solana.signAndSendTransaction(transaction)
+    //  await provider.connection.confirmTransaction(signature);
+
       navigate(0);
     } catch (ex) {
+      message.warning('Please, refresh sometime until u can trigger a transaction')
       console.log(ex);
       setIsLoading(false);
     }
