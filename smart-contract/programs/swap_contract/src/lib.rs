@@ -59,12 +59,12 @@ pub mod swap_contract {
         let fund: &mut Account<'_, Fund>= &mut ctx.accounts.fund;
         let user: &mut Signer<'_> = &mut ctx.accounts.user;
         let rent_balance = Rent::get()?.minimum_balance(fund.to_account_info().data_len());
-        if ** fund.to_account_info().lamports.borrow() -rent_balance <amount *LAMPORTS_PER_SOL/RADIO {
+        if ** fund.to_account_info().lamports.borrow() -rent_balance <amount *LAMPORTS_PER_SOL/RADIO  {
             return Err(ProgramError::InsufficientFunds);
         }
   
         **fund.to_account_info().try_borrow_mut_lamports()?-=amount *LAMPORTS_PER_SOL/RADIO ;
-        **user.to_account_info().try_borrow_mut_lamports()?+=amount *LAMPORTS_PER_SOL/RADIO;
+        **user.to_account_info().try_borrow_mut_lamports()?+=amount *LAMPORTS_PER_SOL/RADIO ;
 
         Ok(())
     }
@@ -74,7 +74,7 @@ pub mod swap_contract {
         let transfer_instruction = system_instruction::transfer(
             &ctx.accounts.user.key(),
             &ctx.accounts.fund.key(),
-            amount * LAMPORTS_PER_SOL /RADIO,
+            amount * LAMPORTS_PER_SOL ,
         );
         anchor_lang::solana_program::program::invoke(
             &transfer_instruction,
@@ -86,7 +86,7 @@ pub mod swap_contract {
 
        
         // transfer SPL
-        let amount_spl_token =  amount *LAMPORTS_PER_SOL;
+        let amount_spl_token =  amount *LAMPORTS_PER_SOL *RADIO ;
         let cpi_accounts = SplTransfer {
             from: ctx.accounts.from_ata.to_account_info(),
             to: ctx.accounts.to_ata.to_account_info(),

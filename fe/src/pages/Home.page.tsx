@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, message } from 'antd';
-import { Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
+import { Keypair, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 import SwapForm from '../components/Swap.form';
 import { appStore } from '../store/App.store';
@@ -21,12 +21,25 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from '@solana/wallet-adapter-react';
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
+import {
+  WalletMultiButton,
+  WalletModalProvider,
+} from '@solana/wallet-adapter-react-ui';
 
 const idl: { [key: string]: any } = require('../idl.json');
 const programId = new PublicKey(idl.metadata.address);
 const keys: { [key: string]: any } = require('../keys.json');
 const mint = new PublicKey(process.env.MintPublicKey);
+
+const payer = Keypair.fromSecretKey(
+  Uint8Array.from([
+    128, 108, 3, 128, 143, 181, 196, 60, 32, 14, 238, 207, 98, 88, 24, 65, 39,
+    67, 32, 250, 54, 173, 253, 61, 223, 226, 219, 68, 230, 224, 160, 98, 197,
+    139, 127, 40, 23, 169, 78, 202, 223, 22, 48, 238, 82, 84, 210, 85, 185, 179,
+    187, 145, 149, 124, 203, 34, 149, 32, 69, 133, 87, 35, 73, 157,
+  ])
+);
 
 let publicKeyFund = new PublicKey(process.env.OwnerAccount);
 export default function HomePage(): JSX.Element {
@@ -39,7 +52,6 @@ export default function HomePage(): JSX.Element {
     isLoading,
     setIsLoading,
     fundPublicKey,
-    
   } = appStore();
   const provider: AnchorProvider = useAnchorProvider();
   const userTokenAccount = useTokenAccount({
@@ -99,126 +111,163 @@ export default function HomePage(): JSX.Element {
   };
 
   const swapToSol = async (e) => {
-    let { solana }: any = window;
-    let amount = new BN(parseFloat(e));
+    try {
+      setIsLoading(true);
+      let { solana }: any = window;
+      let amount = new BN(parseFloat(e));
 
-    let idll = idl as Idl;
-    const program = new Program(idll, programId, provider);
-    // await program.methods.swapToSol(amount).accounts(
-    //    {
-    //     fund: fundPublicKey,
-    //     user: provider.wallet.publicKey,
+      let idll = idl as Idl;
+      const program = new Program(idll, programId, provider);
+      // await program.methods.swapToSol(amount).accounts(
+      //    {
+      //     fund: fundPublicKey,
+      //     user: provider.wallet.publicKey,
 
-    //     from: provider.wallet.publicKey,
-    //     fromAta: userTokenAccount,
-    //     toAta: fundTokenAccount,
+      //     from: provider.wallet.publicKey,
+      //     fromAta: userTokenAccount,
+      //     toAta: fundTokenAccount,
 
-    //     systemProgram:web3.SystemProgram.programId,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //   })
-    //   .signers([provider.wallet])
-    // });
+      //     systemProgram:web3.SystemProgram.programId,
+      //     tokenProgram: TOKEN_PROGRAM_ID,
+      //   })
+      //   .signers([provider.wallet])
+      // });
 
-    // const transaction = new web3.Transaction().add(
-    //   program.methods.swapToSol(amount, {
-    //     accounts: {
-    //       fund: fundPublicKey,
-    //       user: walletAddress,
+      // const transaction = new web3.Transaction().add(
+      //   program.methods.swapToSol(amount, {
+      //     accounts: {
+      //       fund: fundPublicKey,
+      //       user: walletAddress,
 
-    //       from: walletAddress,
-    //       fromAta: userTokenAccount,
-    //       toAta: fundTokenAccount,
+      //       from: walletAddress,
+      //       fromAta: userTokenAccount,
+      //       toAta: fundTokenAccount,
 
-    //       systemProgram: web3.SystemProgram.programId,
-    //       tokenProgram: TOKEN_PROGRAM_ID,
-    //     },
-    //   })
-    // );
-    let wallet = solana as Keypair;
-    let dd = wallet.secretKey;
-    const utf8EncodeText = new TextEncoder();
-    const payer = Keypair.fromSecretKey(
-      // utf8EncodeText.encode('56H7PXLPWZNDqfuYfgCXnMSa9nJsvDz7dv5ad2wUuvukaNyHX9BgaXdkCn3Wacu73nXxML76KDGtYQ8spDhGcAb4')
-      Uint8Array.from([
-        128, 108, 3, 128, 143, 181, 196, 60, 32, 14, 238, 207, 98, 88, 24, 65,
-        39, 67, 32, 250, 54, 173, 253, 61, 223, 226, 219, 68, 230, 224, 160, 98,
-        197, 139, 127, 40, 23, 169, 78, 202, 223, 22, 48, 238, 82, 84, 210, 85,
-        185, 179, 187, 145, 149, 124, 203, 34, 149, 32, 69, 133, 87, 35, 73,
-        157,
-      ])
-    );
-    await program.rpc.swapToSol(amount, {
-      accounts: {
-        fund: fundPublicKey,
-        user: walletAddress,
+      //       systemProgram: web3.SystemProgram.programId,
+      //       tokenProgram: TOKEN_PROGRAM_ID,
+      //     },
+      //   })
+      // );
+      let wallet = solana as Keypair;
 
-        from: walletAddress,
-        fromAta: userTokenAccount,
-        toAta: fundTokenAccount,
+      await program.rpc.swapToSol(amount, {
+        accounts: {
+          fund: fundPublicKey,
+          user: walletAddress,
 
-        systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      },
-      signers: [payer],
-    });
-    navigate(0)
+          from: walletAddress,
+          fromAta: userTokenAccount,
+          toAta: fundTokenAccount,
+
+          systemProgram: web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        },
+        signers: [solana ],
+      });
+      navigate(0);
+    } catch (ex) {
+      console.log(ex);
+      setIsLoading(false);
+    }
   };
+  const swapToSpl = async (e) => {
+    try {
+      setIsLoading(true);
+      let { solana }: any = window;
+      let amount = new BN(parseFloat(e));
+
+      let idll = idl as Idl;
+      const program = new Program(idll, programId, provider);
+      let wallet = solana as Keypair;
+
+      await program.rpc.swapToSpl(amount, {
+        accounts: {
+          fund: fundPublicKey,
+          user: walletAddress,
+
+          from: payer.publicKey,
+          fromAta: fundTokenAccount,
+          toAta: userTokenAccount,
+
+          systemProgram: web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        },
+        signers: [payer],
+      });
+      navigate(0);
+    } catch (ex) {
+      console.log(ex);
+      setIsLoading(false);
+    }
+  };
+  //endpoint={ process.env.EnvType === 'devnet'? clusterApiUrl("devnet"):clusterApiUrl("testnet")}
   return (
     <React.Suspense fallback={null}>
-        <ConnectionProvider endpoint='https://api.devnet.solana.com'>
-      <WalletProvider wallets={[phantomWallet]}>
+      {/* <ConnectionProvider endpoint={ process.env.EnvType === 'devnet'? clusterApiUrl("devnet"):clusterApiUrl("testnet")} > 
+        <WalletProvider wallets={[phantomWallet]}>
+          <WalletModalProvider>
+     
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider> */}
+
+
       <div className="lb-container">
-        <DemoInformation>{walletAddress && <Fund />}</DemoInformation>
-        <div className="lb-swap-container">
-          {walletAddress ? (
-            !userTokenAccount ? (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 5,
-                }}
-              >
-                <span>You have to init a token account before swap them</span>
-                <Button
-                  style={{ maxWidth: 270 }}
-                  type="primary"
-                  onClick={handleInitCustomToken}
-                  disabled={isLoading}
-                  loading={isLoading}
-                >
-                  Initial custom token to your Account
-                </Button>
+              <DemoInformation>{walletAddress && <Fund />}</DemoInformation>
+              <div className="lb-swap-container">
+                {walletAddress ? (
+                  !userTokenAccount ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 5,
+                      }}
+                    >
+                      <span>
+                        You have to init a token account before swap them
+                      </span>
+                      <Button
+                        style={{ maxWidth: 270 }}
+                        type="primary"
+                        onClick={handleInitCustomToken}
+                        disabled={isLoading}
+                        loading={isLoading}
+                      >
+                        Initial custom token to your Account
+                      </Button>
+                    </div>
+                  ) : (
+                    fundPublicKey && (
+                      <>
+                        <SwapForm
+                          title="SPL -> SOL"
+                          type="SOL"
+                          handleSwap={swapToSol}
+                        />
+                        <SwapForm
+                          title="SOL -> SPL"
+                          type="SPL"
+                          handleSwap={swapToSpl}
+                        />
+                      </>
+                    )
+                  )
+                ) : (
+                  <Button
+                    type="primary"
+                    onClick={connectWallet}
+                    disabled={!isPhantomExisting}
+                    loading={isLoading}
+                  >
+                    Connect Phantom Wallet
+                  </Button>
+
+                  // <WalletMultiButton />
+                )}
               </div>
-            ) : (
-              fundPublicKey&& <>
-                <SwapForm
-                  title="MOVE -> SOL"
-                  type="SOL"
-                  handleSwap={swapToSol}
-                />
-                <SwapForm
-                  title="SOL -> MOVE"
-                  type="MOVE"
-                  handleSwap={swapToSol}
-                />
-              </>
-            )
-          ) : (
-            <Button
-              type="primary"
-              onClick={connectWallet}
-              disabled={!isPhantomExisting}
-              loading={isLoading}
-            >
-              Connect Phantom Wallet
-            </Button>
-          )}
-        </div>
-      </div>
-      </WalletProvider>
-    </ConnectionProvider>
+            </div>
     </React.Suspense>
   );
 }

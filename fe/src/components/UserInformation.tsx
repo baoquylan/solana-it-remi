@@ -20,8 +20,7 @@ export default function UserInformation({}): React.ReactNode {
     splBalance,
     setSPLBalance,
   } = appStore();
-  const wallet = useAnchorWallet();
-  console.log(wallet)
+
   const provider: AnchorProvider = useAnchorProvider();
   const userTokenAccount = useTokenAccount({ provider ,address:walletAddress });
   useEffect(() => {

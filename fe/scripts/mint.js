@@ -70,11 +70,28 @@ const createSPLToken = async () => {
     mint,
     tokenAccount.address,
     mintAuthority,
-    100 *LAMPORTS_PER_SOL
+    1000000 *LAMPORTS_PER_SOL
   );
   // const mintInfo = await getMint(connection, new PublicKey('FCn9B1uTEsVevM89NCsJPvvcKwSpRrFCXSkYedSkje4U'));
   checkTokenAccounts();
 };
+// const mint= async()=>{
+//   let mintAccount = new PublicKey('DtKoLP7vEyMBP8muouk939yLysg4Y6kgeotkJnREKjnW')
+//   const tokenAccount = await getOrCreateAssociatedTokenAccount(
+//     connection,
+//     payer,
+//     mintAccount,
+//     payer.publicKey
+//   );
 
-
+//   await mintTo(
+//     connection,
+//     payer,
+//     mintAccount,
+//     tokenAccount.address,
+//     mintAuthority,
+//     1000 *LAMPORTS_PER_SOL
+//   );
+// }
+// mint()
 createSPLToken();

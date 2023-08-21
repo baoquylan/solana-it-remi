@@ -30,7 +30,7 @@ export default function SwapForm({ title, type ,handleSwap}: SwapFormProps): JSX
   React.useEffect(() => {
     if(newValue){
         let parseToNumber: number = parseFloat(newValue)
-        if (type !== 'MOVE') {
+        if (type !== 'SPL') {
           form.setFieldValue('token_2', parseToNumber === 0 ? 0 : parseToNumber / radio);
         } else {
             form.setFieldValue('token_2',  parseToNumber * radio);
@@ -51,19 +51,20 @@ export default function SwapForm({ title, type ,handleSwap}: SwapFormProps): JSX
               rules={[
                 {
                   required: true,
-                  message: `Please enter ${type !== 'SOL' ? 'SOL' : 'MOVE'}`
+                  message: `Please enter ${type !== 'SOL' ? 'SOL' : 'SPL'}`
                 },
               ]}
             >
               <InputNumber
                 min={0}
                 defaultValue={0}
+                step={1}
                 style={{
                   backgroundColor: 'transparent !important',
                   background: 'transparent',
                   width: '100%',
                 }}
-                placeholder={type !== 'SOL' ? 'SOL' : 'MOVE'}
+                placeholder={type !== 'SOL' ? 'SOL' : 'SPL'}
               />
             </Form.Item>
 
@@ -75,7 +76,8 @@ export default function SwapForm({ title, type ,handleSwap}: SwapFormProps): JSX
                   background: 'transparent',
                   width: '100%',
                 }}
-                placeholder={type === 'SOL' ? 'SOL' : 'MOVE'}
+                step={1}
+                placeholder={type === 'SOL' ? 'SOL' : 'SPL'}
                 disabled
               />
             </Form.Item>

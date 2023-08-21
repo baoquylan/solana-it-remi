@@ -19,7 +19,7 @@ const prodConfig = {
       template: path.join(__dirname, '../public/index.html'),
     }),
     new DefinePlugin({
-      'process.env.MintPublicKey': JSON.stringify('2Rb6EWDG4peN1GwZqB24Ky6SebRCQjZWiNcHuStHzWVu'),
+      'process.env.MintPublicKey': JSON.stringify('8FAKrzavfqXzsPpeDBFUAseu88TsQU3h4A3MBfykDHsD'),
       'process.env.OwnerAccount': JSON.stringify('EJ8gucJAZxA1LspjGMNYBWsXUSYpimSg6UW99QHPBMAL'),
       'process.env.EnvType': JSON.stringify('testnet')
     }),

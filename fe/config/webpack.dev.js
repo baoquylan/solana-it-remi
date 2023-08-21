@@ -24,7 +24,7 @@ const devConfig = {
       template: path.join(__dirname, '../public/index.html'),
     }),
     new DefinePlugin({
-      'process.env.MintPublicKey': JSON.stringify('DtKoLP7vEyMBP8muouk939yLysg4Y6kgeotkJnREKjnW'),
+      'process.env.MintPublicKey': JSON.stringify('qKiTg1akAn5niu4pDmHQAUccDFCLBGq8UkyC2MVdTZP'),
       'process.env.OwnerAccount': JSON.stringify('EJ8gucJAZxA1LspjGMNYBWsXUSYpimSg6UW99QHPBMAL'),
       'process.env.EnvType': JSON.stringify('devnet')
     }),
