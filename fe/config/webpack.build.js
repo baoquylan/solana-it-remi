@@ -19,9 +19,12 @@ const prodConfig = {
       template: path.join(__dirname, '../public/index.html'),
     }),
     new DefinePlugin({
-      'process.env.MintPublicKey': JSON.stringify('2SsAM7TxVQhKU1y1LxswHtYrUB2RVueB6KrkRN67uaRx'),
+      // 'process.env.MintPublicKey': JSON.stringify('DtKoLP7vEyMBP8muouk939yLysg4Y6kgeotkJnREKjnW'),
+      // 'process.env.OwnerAccount': JSON.stringify('EJ8gucJAZxA1LspjGMNYBWsXUSYpimSg6UW99QHPBMAL'),
+      // 'process.env.EnvType': JSON.stringify('testnet')
       'process.env.MintPublicKey': JSON.stringify('DtKoLP7vEyMBP8muouk939yLysg4Y6kgeotkJnREKjnW'),
-      'process.env.EnvType': JSON.stringify('testnet')
+      'process.env.OwnerAccount': JSON.stringify('EJ8gucJAZxA1LspjGMNYBWsXUSYpimSg6UW99QHPBMAL'),
+      'process.env.EnvType': JSON.stringify('devnet')
     }),
   ],
 };
