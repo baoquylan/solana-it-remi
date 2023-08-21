@@ -41,7 +41,7 @@ describe("swap_contract", async () => {
     });
   });
   it("airdrop", async () => {
-    let amount = 2 * anchor.web3.LAMPORTS_PER_SOL;
+    let amount = 100 * anchor.web3.LAMPORTS_PER_SOL;
     let fromAirdropSignature = await provider.connection.requestAirdrop(
       fund,
       amount
@@ -96,7 +96,7 @@ describe("swap_contract", async () => {
       mint,
       tokenAccountEndUser.address,
       payer.publicKey,
-      100* anchor.web3.LAMPORTS_PER_SOL
+      1000000* anchor.web3.LAMPORTS_PER_SOL
     );
   });
   it("swap sol", async () => {
@@ -137,13 +137,13 @@ describe("swap_contract", async () => {
       endUser.publicKey
     );
     let fundSolBalance = await provider.connection.getBalance(fund);
-    console.log(
-      "swap sol",
-      ensUserSplBalance.value.amount,
-      fundSplBalance.value.amount,
-      endUserSolBalance / anchor.web3.LAMPORTS_PER_SOL,
-      fundSolBalance / anchor.web3.LAMPORTS_PER_SOL
-    );
+    // console.log(
+    //   "swap sol",
+    //   ensUserSplBalance.value.amount ,
+    //   fundSplBalance.value.amount,
+    //   endUserSolBalance / anchor.web3.LAMPORTS_PER_SOL,
+    //   fundSolBalance / anchor.web3.LAMPORTS_PER_SOL
+    // );
 
     assert.strictEqual(
       Math.abs(endUserSolBalanceInit - endUserSolBalance) /
@@ -207,22 +207,22 @@ describe("swap_contract", async () => {
       endUser.publicKey
     );
     let fundSolBalance = await provider.connection.getBalance(fund);
-    console.log(
-      "swap spl",
-      ensUserSplBalance.value.amount,
-      fundSplBalance.value.amount,
-      endUserSolBalance / anchor.web3.LAMPORTS_PER_SOL,
-      fundSolBalance / anchor.web3.LAMPORTS_PER_SOL
-    );
+    // console.log(
+    //   "swap spl",
+    //   ensUserSplBalance.value.amount,
+    //   fundSplBalance.value.amount,
+    //   endUserSolBalance / anchor.web3.LAMPORTS_PER_SOL,
+    //   fundSolBalance / anchor.web3.LAMPORTS_PER_SOL
+    // );
 
     assert.strictEqual(
       Math.abs(endUserSolBalanceInit - endUserSolBalance) /
-        anchor.web3.LAMPORTS_PER_SOL*RADIO,
+        anchor.web3.LAMPORTS_PER_SOL,
       amount.toNumber() 
     );
     assert.strictEqual(
       Math.abs(fundSolBalanceInit - fundSolBalance) /
-        anchor.web3.LAMPORTS_PER_SOL *RADIO,
+        anchor.web3.LAMPORTS_PER_SOL ,
       amount.toNumber() 
     );
     assert.strictEqual(
@@ -230,14 +230,14 @@ describe("swap_contract", async () => {
         parseFloat(ensUserSplBalanceInit.value.amount) -
           parseFloat(ensUserSplBalance.value.amount)
       )/anchor.web3.LAMPORTS_PER_SOL,
-      amount.toNumber() 
+      amount.toNumber() *RADIO
     );
     assert.strictEqual(
       Math.abs(
         parseFloat(fundSplBalanceInit.value.amount) -
           parseFloat(fundSplBalance.value.amount)
       )/anchor.web3.LAMPORTS_PER_SOL,
-      amount.toNumber()
+      amount.toNumber()*RADIO
     );
   });
 });
