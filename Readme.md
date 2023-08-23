@@ -92,3 +92,13 @@ npm install
 npm start
 ```
 
+### User Interface:
+1. Main page:
+
+After you connect with Phantom wallet, you have to init a token account for custom token before swap them
+![Alt text](image-1.png)
+
+2. Swap input:
+
+After you init token account you can see 2 swap input SPL->SOL and SOL->SPL with radio (10 SPL = 1 SQL and vice versa)
+![Alt text](image-2.png)
