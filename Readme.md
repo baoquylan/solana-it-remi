@@ -45,8 +45,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 
 // Restart Ubuntu Terminal
 
-// Test if nvm exists - this will return "nvm" and not a version number if working correctly!
-command -v nvm
+// Test if nvm exists - this will return "nvm" and a version number if working correctly!
+nvm -v 
 
 // Install the latest version of Node.js
 nvm install --lts
@@ -72,7 +72,7 @@ cd smart_contract
 anchor test
 ```
 #### 🔥Build and deploy:
-In this Readme, I will introduce deploy to localhost. If you looking for testnet or devnet, you can swith to them by change the Anchor.toml:
+In this Readme, I will introduce deploy to localhost. If you looking for testnet or devnet, you can switch to them by change the Anchor.toml:
 
 ![Alt text](image.png)
 
